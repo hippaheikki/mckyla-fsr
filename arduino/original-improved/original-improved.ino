@@ -3,18 +3,22 @@
 
 #define BASE_PRESSURE  0
 
-#define LEFT_PRESSURE  375       
-#define DOWN_PRESSURE  437
-#define RIGHT_PRESSURE 380
-#define UP_PRESSURE    345
+#define LEFT_PRESSURE  300       
+#define DOWN_PRESSURE  300
+#define RIGHT_PRESSURE 300
+#define UP_PRESSURE    300
 
 #include <Keyboard.h>
- 
+
 int fsrAnalogPin = 0; // FSR is connected to analog 0
-int LURD_pins[4] = {0, 1, 2, 3};
+int LURD_pins[4] = {1, 0, 2, 3};
+int LURD_Values[4] = {0, 0, 0, 0};
 int LURD_State[4] = {0, 0, 0, 0};
 int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSURE};
-char LURD_Keys[5] = "awds";
+int oldValueWeight = 1;
+float releaseMultiplier = 0.9f;
+
+char LURD_Keys[5] = "uipo";
 const unsigned int MAX_INPUT = 50;
 void setup(void) {
   Serial.begin(9600);
@@ -28,9 +32,10 @@ void process_data (char * data)
 
   //do some string parsing  
   data[4]=0;
-  if (data[0]-48 < 5)
+  char index = data[0]-48;
+  if (index < 5)
   {
-   LURD_pressures[data[0]-48] = atoi((const char *)&(data[1]));
+    LURD_pressures[index] = atoi((const char *)&(data[1]));
   }
   Serial.print("L pressure: ,");
   if (LURD_pressures[0] < 100)
@@ -124,7 +129,9 @@ void loop(void) {
 //Serial.println(analogRead(1));
  for (int i = 0; i < 4; i++)
  {
-     if (analogRead(LURD_pins[i]) > (LURD_pressures[i] + BASE_PRESSURE))
+    LURD_Values[i] = (LURD_Values[i] * oldValueWeight + analogRead(LURD_pins[i])) / (oldValueWeight + 1);
+    int borderValue = (LURD_pressures[i] + BASE_PRESSURE);
+     if (LURD_Values[i] > borderValue)
      {
       if (LURD_State[i] == 0)
       {
@@ -134,29 +141,28 @@ void loop(void) {
      }
      else
      {
-      if (LURD_State[i] == 1)
+      if (LURD_State[i] == 1 && LURD_Values[i] < borderValue * releaseMultiplier)
       {
         Keyboard.release(LURD_Keys[i]);
         LURD_State[i] = 0;
       }
      }
  }
-  /*
-   * Debugging:
-  fsrReading = analogRead(0);
-  Serial.print("Analog reading (L)= ");
-  Serial.println(fsrReading);
- 
-  fsrReading = analogRead(1);
-  Serial.print("Analog reading (U)= ");
-  Serial.println(fsrReading);
 
-  fsrReading = analogRead(2);
-  Serial.print("Analog reading (R)= ");
-  Serial.println(fsrReading);
-
-  fsrReading = analogRead(3);
-  Serial.print("Analog reading (D)= ");
-  Serial.println(fsrReading);
- */
+ /* if(counter % 10 == 0) {
+    int fsrReading = analogRead(0);
+    Serial.print(fsrReading);
+    Serial.print(";");
+    fsrReading = analogRead(1);
+    Serial.print(fsrReading);
+    Serial.print(";");
+  
+    fsrReading = analogRead(2);
+    Serial.print(fsrReading);
+    Serial.print(";");
+  
+    fsrReading = analogRead(3);
+    Serial.print(fsrReading);
+    Serial.println(";");
+  }*/
 }

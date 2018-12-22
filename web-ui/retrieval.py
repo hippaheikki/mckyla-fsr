@@ -22,8 +22,8 @@ l_pressure = form.getvalue("left_pressure")
 u_pressure = form.getvalue("up_pressure")
 r_pressure = form.getvalue("right_pressure")
 d_pressure = form.getvalue("down_pressure")
-#s = serial.Serial("/dev/ttyACM0", 9600)
-#s.setDTR(1)
+s = serial.Serial("/dev/ttyACM0", 9600)
+s.setDTR(1)
 f = open("users.txt", "rb")
 users_file = f.read()
 f.close()
@@ -37,26 +37,26 @@ cur_user_list = user_list[cur_user_list_index].strip("\n").split(":")
 if (len(l_pressure) == 3):
     if cur_user_list_index != -1:
         cur_user_list[1]=l_pressure
-    #s.write("0"+l_pressure+"\r\n")
-    #new_pressures = s.read(78)
+    s.write("0"+l_pressure+"\r\n")
+    new_pressures = s.read(78)
 if (len(u_pressure) == 3):
     if cur_user_list_index != -1:
         cur_user_list[2]=u_pressure
-    #s.write("1"+u_pressure+"\r\n")
-    #new_pressures = s.read(78)
+    s.write("1"+u_pressure+"\r\n")
+    new_pressures = s.read(78)
 if (len(r_pressure) == 3):
     if cur_user_list_index != -1:
         cur_user_list[3]=r_pressure
-    #s.write("2"+r_pressure+"\r\n")
-    #new_pressures = s.read(78)
+    s.write("2"+r_pressure+"\r\n")
+    new_pressures = s.read(78)
 if (len(d_pressure) == 3):
     if cur_user_list_index != -1:
         cur_user_list[4]=d_pressure
-    #s.write("3"+d_pressure+"\r\n")
-    #new_pressures = s.read(78)
+    s.write("3"+d_pressure+"\r\n")
+    new_pressures = s.read(78)
 if (len(l_pressure) != 3 and len(u_pressure)  != 3 and len(r_pressure)  != 3 and len(d_pressure)  != 3):
-    #s.write("7\r\n")
-    #new_pressures = s.read(78)
+    s.write("7\r\n")
+    new_pressures = s.read(78)
 print new_pressures.replace(",", "|")
 print '''<br><a href=pads.py?cur_user=%s>Return</a>''' % cur_user
 
@@ -65,7 +65,7 @@ f = open("users.txt", "wb")
 f.write("^".join(user_list))
 f.close
 
-#s.close()
+s.close()
 print '''<script>setTimeout(function() { window.location = "pads.py?cur_user=%s" }, 1000) </script>''' % cur_user
 
 print '''</body>'''
