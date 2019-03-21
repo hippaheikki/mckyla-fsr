@@ -6,9 +6,9 @@ print
 print '''<html>'''
 
 print '''	<head>'''
-print '''		<link rel="stylesheet" type="text/css" href="styles/styles.css">'''
-print '''		<script src="js/jquery-3.2.1.min.js"></script>'''
-print '''		<script src="js/scripts.js"></script>'''
+print '''		<link rel="stylesheet" type="text/css" href="../styles/styles.css">'''
+print '''		<script src="../js/jquery-3.2.1.min.js"></script>'''
+print '''		<script src="../js/scripts.js"></script>'''
 print '''	</head>'''
 
 print '''	<body>'''
