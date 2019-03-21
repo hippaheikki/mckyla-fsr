@@ -58,7 +58,7 @@ if (len(l_pressure) != 3 and len(u_pressure)  != 3 and len(r_pressure)  != 3 and
     s.write("7\r\n")
     new_pressures = s.read(78)
 print new_pressures.replace(",", "|")
-print '''<br><a href=pads.py?cur_user=%s>Return</a>''' % cur_user
+print '''<br><a href=pad1/pads.py?cur_user=%s>Return</a>''' % cur_user
 
 user_list[cur_user_list_index] = ":".join(cur_user_list)
 f = open("users.txt", "wb")
@@ -66,7 +66,7 @@ f.write("^".join(user_list))
 f.close
 
 s.close()
-print '''<script>setTimeout(function() { window.location = "pads.py?cur_user=%s" }, 1000) </script>''' % cur_user
+print '''<script>setTimeout(function() { window.location = "pad1/pads.py?cur_user=%s" }, 1000) </script>''' % cur_user
 
 print '''</body>'''
 print '''</html>'''

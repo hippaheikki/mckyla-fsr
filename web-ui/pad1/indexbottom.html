@@ -1,0 +1,45 @@
+				<form action="/pad1/retrieval.py" method="get">
+			
+					<div style= "margin: 4px 0px 4px 0px;">
+						<div class="hhead" style="width: 400px; display: table-cell;">Showing Pressures for:</div>
+						<div class="hcell" style="border-left: 2px solid #020a12; width: 198; display: table-cell;"><input type="text" name="cur_user" value=%s></div>
+					</div>
+
+					<table id="pressures">
+						<tr>
+							<td></td>
+							<td>
+								<div class="hhead" style="border-radius: 15px 15px 0px 0px;">Up</div>
+								<div class="hcell" style="border-top: 2px solid #020a12; border-radius: 0px 0px 15px 15px;"><button type="button" onmousedown="arrowDown(1, 'up')" onmouseup="arrowDown(0, 'up')" onClick="increment(-10,'up')"class="minus10">- 10</button><button type="button" onmousedown="arrowDown(1, 'up')" onmouseup="arrowDown(0, 'up')" onClick="increment(-5,'up')"class="minus5">- 5</button><input type="text" name="up_pressure" value="%.3d" onfocus="arrowDown(1, 'up')" onblur="arrowDown(0, 'up')"><button type="button" onmousedown="arrowDown(1, 'up')" onmouseup="arrowDown(0, 'up')" onClick="increment(5,'up')" class="plus5">+ 5</button><button type="button" onmousedown="arrowDown(1, 'up')" onmouseup="arrowDown(0, 'up')" onClick="increment(10,'up')"class="plus10">+ 10</button></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								<div class="vhead" style="border-radius: 15px 0px 0px 15px;">Left</div>
+								<div class="vcell" style="border-left: 2px solid #020a12; border-radius: 0px 15px 15px 0px;"><button type="button" onmousedown="arrowDown(1, 'left')" onmouseup="arrowDown(0, 'left')" onClick="increment(-10,'left')"class="minus10">- 10</button><button type="button" onmousedown="arrowDown(1, 'left')" onmouseup="arrowDown(0, 'left')" onClick="increment(-5,'left')"class="minus5">- 5</button><input type="text" name="left_pressure" value="%.3d" onfocus="arrowDown(1, 'left')" onblur="arrowDown(0, 'left')"><button type="button" onmousedown="arrowDown(1, 'left')" onmouseup="arrowDown(0, 'up')" onClick="increment(5,'left')" class="plus5">+ 5</button><button type="button" onmousedown="arrowDown(1, 'left')" onmouseup="arrowDown(0, 'left')" onClick="increment(10,'left')"class="plus10">+ 10</button></div>
+							</td>
+							<td><img src="../img/dance.png" id="pad" style="margin:0px 2px 0px 2px;"></td>
+							<td>
+								<div class="vcell" style="border-right: 2px solid #020a12; border-radius: 15px 0px 0px 15px;"><button type="button" onmousedown="arrowDown(1, 'right')" onmouseup="arrowDown(0, 'right')" onClick="increment(-10,'right')"class="minus10">- 10</button><button type="button" onmousedown="arrowDown(1, 'right')" onmouseup="arrowDown(0, 'right')" onClick="increment(-5,'right')"class="minus5">- 5</button><input type="text" name="right_pressure" value="%.3d" onfocus="arrowDown(1, 'right')" onblur="arrowDown(0, 'right')"><button type="button" onmousedown="arrowDown(1, 'right')" onmouseup="arrowDown(0, 'right')" onClick="increment(5,'right')" class="plus5">+ 5</button><button type="button" onmousedown="arrowDown(1, 'right')" onmouseup="arrowDown(0, 'right')" onClick="increment(10,'right')"class="plus10">+ 10</button></div>
+								<div class="vhead" style="border-radius: 0px 15px 15px 0px;">Right</div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<div class="hcell" style="border-bottom: 2px solid #020a12; border-radius: 15px 15px 0px 0px;"><button type="button" onmousedown="arrowDown(1, 'down')" onmouseup="arrowDown(0, 'down')" onClick="increment(-10,'down')"class="minus10">- 10</button><button type="button" onmousedown="arrowDown(1, 'down')" onmouseup="arrowDown(0, 'down')" onClick="increment(-5,'down')"class="minus5">- 5</button><input type="text" name="down_pressure" value="%.3d" onfocus="arrowDown(1, 'down')" onblur="arrowDown(0, 'down')"><button type="button" onmousedown="arrowDown(1, 'down')" onmouseup="arrowDown(0, 'down')" onClick="increment(5,'down')" class="plus5">+ 5</button><button type="button" onmousedown="arrowDown(1, 'down')" onmouseup="arrowDown(0, 'down')" onClick="increment(10,'down')"class="plus10">+ 10</button></div>
+								<div class="hhead" style="border-radius: 0px 0px 15px 15px;">Down</div>
+							</td>
+							<td></td>				
+						</tr>
+					</table>
+			</div>
+			<div style="display: table-cell; vertical-align: bottom;">
+				<input type="submit" style="width: 100; height: 595px; margin-left: 8px; font-size: 20px; text-transform: uppercase; display: table-cell;" value="Submit">
+			</div>
+
+				</form>
+		</div>
+	</body>
+</html>
