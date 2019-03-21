@@ -12,8 +12,8 @@ function increment(amt, direction) {
 
 function arrowDown (toggle, direction) {
 	if (toggle == 0) {
-		document.getElementById("pad").src = "img/dance.png";
+		document.getElementById("pad").src = "../img/dance.png";
 	} else {
-		document.getElementById("pad").src = "img/dance"+direction+".png";	
+		document.getElementById("pad").src = "../img/dance"+direction+".png";	
 	}
 }
