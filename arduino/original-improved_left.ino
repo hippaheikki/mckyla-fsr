@@ -3,10 +3,10 @@
 
 #define BASE_PRESSURE  0
 
-#define LEFT_PRESSURE  300       
-#define DOWN_PRESSURE  300
-#define RIGHT_PRESSURE 300
-#define UP_PRESSURE    300
+#define LEFT_PRESSURE  500       
+#define DOWN_PRESSURE  500
+#define RIGHT_PRESSURE 500
+#define UP_PRESSURE    500
 
 #include <Keyboard.h>
 
