@@ -2,26 +2,22 @@
 import serial
 import cgi
 
-
 def getSerialConnection(padSideByteString):
-	padSideByte = 0 if (padSideByteString == "left") else 1
+	padSideStr = "0" if (padSideByteString == "left") else "1"
 
 	s = serial.Serial("/dev/ttyACM0", 9600)
 	s.setDTR(1)
 
 	#Send 9: Gief pad side from ttyACM0
 	s.write("9\r\n")
-	padSide = s.read(78)
+	padSide = s.readline()
 
-	if padSide != padSideByte:
+	if padSide[0] != padSideStr:
 		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
 		s.close()
 
 		s = serial.Serial("/dev/ttyACM1", 9600)
 		s.setDTR(1)
-		print "<script>alert('" + padSideByteString + " side is @ttyACM1 (data read from arduino: " + padSide + "');</script>"
-	else:
-		print "<script>alert('" + padSideByteString + " side is @ttyACM0 (data read from arduino: " + padSide + "');</script>"
 	
 	return s
 

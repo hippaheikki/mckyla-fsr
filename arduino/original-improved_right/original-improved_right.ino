@@ -18,8 +18,6 @@ int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSU
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
 
-char PAD_SIDE = "1";
-
 char LURD_Keys[5] = "hjlk";
 const unsigned int MAX_INPUT = 50;
 void setup(void) {
@@ -37,8 +35,8 @@ void process_data (char * data)
   char index = data[0]-48;
   //pad side query (9) or set pressures (0-3)???
   if (index == 9) {
-	  //I'm left!
-	  Serial.print(PAD_SIDE);
+	  //I'm right!
+	  Serial.println('1');
   } else {
 	if (index < 5)
 	{

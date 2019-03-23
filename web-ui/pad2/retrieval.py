@@ -5,16 +5,16 @@ import serial
 import time
 
 def getSerialConnection(padSideByteString):
-	padSideByte = 0 if (padSideByteString == "left") else 1
+	padSideStr = "0" if (padSideByteString == "left") else "1"
 
 	s = serial.Serial("/dev/ttyACM0", 9600)
 	s.setDTR(1)
 
 	#Send 9: Gief pad side from ttyACM0
 	s.write("9\r\n")
-	padSide = s.read()
+	padSide = s.readline()
 
-	if padSide != padSideByte:
+	if padSide[0] != padSideStr:
 		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
 		s.close()
 
@@ -22,6 +22,7 @@ def getSerialConnection(padSideByteString):
 		s.setDTR(1)
 	
 	return s
+
 
 print "Content-type: text/html"
 print
