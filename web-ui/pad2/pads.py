@@ -1,6 +1,30 @@
 #!/usr/bin/env python
 import serial
 import cgi
+
+
+def getSerialConnection(padSideByteString):
+	padSideByte = 0 if (padSideByteString == "left") else 1
+
+	s = serial.Serial("/dev/ttyACM0", 9600)
+	s.setDTR(1)
+
+	#Send 9: Gief pad side from ttyACM0
+	s.write("9\r\n")
+	padSide = s.read()
+
+	if padSide != padSideByte:
+		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
+		s.close()
+
+		s = serial.Serial("/dev/ttyACM1", 9600)
+		s.setDTR(1)
+		print "<script>alert('ttyACM1 has " + padSideByteString + " side');</script>"
+	else:
+		print "<script>alert('ttyACM0 has " + padSideByteString + " side');</script>"
+	
+	return s
+
 print "Content-type: text/html"
 print
 print '''<html>'''
@@ -66,25 +90,3 @@ s.close()
 f = open("pad2/indexbottom.html", "rb")
 print f.read() % (cur_user, int(cur_pressures[3]), int(cur_pressures[1]), int(cur_pressures[5]), int(cur_pressures[7]))
 f.close()
-
-def getSerialConnection(padSideByteString):
-	padSideByte = 0 if (padSideByteString == "left") else 1
-
-	s = serial.Serial("/dev/ttyACM0", 9600)
-	s.setDTR(1)
-
-	#Send 9: Gief pad side from ttyACM0
-	s.write("9\r\n")
-	padSide = s.read()
-
-	if padSide != padSideByte:
-		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
-		s.close()
-
-		s = serial.Serial("/dev/ttyACM1", 9600)
-		s.setDTR(1)
-		print "<script>alert('ttyACM1 has " + padSideByteString + " side');</script>"
-	else:
-		print "<script>alert('ttyACM0 has " + padSideByteString + " side');</script>"
-	
-	return s
