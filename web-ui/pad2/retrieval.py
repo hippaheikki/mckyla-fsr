@@ -72,7 +72,7 @@ print '''</body>'''
 print '''</html>'''
 
 def getSerialConnection(padSideByteString):
-	padSideByte = (padSideByteString == "left") ? 0 : 1
+	padSideByte = 0 if (padSideByteString == "left") else 1
 
 	s = serial.Serial("/dev/ttyACM0", 9600)
 	s.setDTR(1)
