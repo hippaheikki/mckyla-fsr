@@ -21,9 +21,6 @@ def getSerialConnection(padSideByteString):
 
 		s = serial.Serial("/dev/ttyACM1", 9600)
 		s.setDTR(1)
-		print "<script>alert('ttyACM1 has " + padSideByteString + " side');</script>"
-	else:
-		print "<script>alert('ttyACM0 has " + padSideByteString + " side');</script>"
 	
 	return s
 
