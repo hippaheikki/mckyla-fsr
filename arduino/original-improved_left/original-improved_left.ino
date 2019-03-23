@@ -11,7 +11,7 @@
 #include <Keyboard.h>
 
 int fsrAnalogPin = 0; // FSR is connected to analog 0
-int LURD_pins[4] = {1, 0, 2, 3};
+int LURD_pins[4] = {0, 2, 3, 1};
 int LURD_Values[4] = {0, 0, 0, 0};
 int LURD_State[4] = {0, 0, 0, 0};
 int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSURE};
