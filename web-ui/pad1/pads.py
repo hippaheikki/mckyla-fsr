@@ -43,8 +43,9 @@ print '''					</div>'''
 print '''				</div>'''
 form = cgi.FieldStorage()
 cur_user = form.getvalue("cur_user")
-s = serial.Serial("/dev/ttyACM0", 9600)
-s.setDTR(1)
+
+s = getSerialConnection("left")
+
 if (cur_user != "Guest" and cur_user != ""):
     for u in user_list:
         u_array = u.split(":")
@@ -66,3 +67,26 @@ s.close()
 f = open("pad1/indexbottom.html", "rb")
 print f.read() % (cur_user, int(cur_pressures[3]), int(cur_pressures[1]), int(cur_pressures[5]), int(cur_pressures[7]))
 f.close()
+
+def function getSerialConnection(padSideByteString):
+	padSideByte = (padSideByteString == "left") ? 0 : 1
+
+	s = serial.Serial("/dev/ttyACM0", 9600)
+	s.setDTR(1)
+
+	#Send 9: Gief pad side from ttyACM0
+	s.write("9\r\n")
+	padSide = s.read()
+
+	if (padSide != padSideByte) {
+		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
+		s.close()
+
+		s = serial.Serial("/dev/ttyACM1", 9600)
+		s.setDTR(1)
+		print "<script>alert('ttyACM1 has " + padSideByteString + " side');</script>"
+	} else {
+		print "<script>alert('ttyACM0 has " + padSideByteString + " side');</script>"
+	}
+	
+	return s

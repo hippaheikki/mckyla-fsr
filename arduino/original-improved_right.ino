@@ -18,6 +18,8 @@ int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSU
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
 
+byte PAD_SIDE = 1;
+
 char LURD_Keys[5] = "hjlk";
 const unsigned int MAX_INPUT = 50;
 void setup(void) {
@@ -33,65 +35,70 @@ void process_data (char * data)
   //do some string parsing  
   data[4]=0;
   char index = data[0]-48;
-  if (index < 5)
-  {
-    LURD_pressures[index] = atoi((const char *)&(data[1]));
+  //pad side query (9) or set pressures (0-3)???
+  if (index == 9) {
+	  //I'm left!
+	  Serial.print(PAD_SIDE);
+  } else {
+	if (index < 5)
+	{
+	LURD_pressures[index] = atoi((const char *)&(data[1]));
+	}
+	Serial.print("L pressure: ,");
+	if (LURD_pressures[0] < 100)
+	{
+	  Serial.print("0");
+	}
+	if (LURD_pressures[0] < 10)
+	{
+	  Serial.print("0");
+	}
+	Serial.print(LURD_pressures[0]);
+	Serial.println(",");
+	Serial.print("U pressure: ,");
+	if (LURD_pressures[1] < 100)
+	{
+	  Serial.print("0");
+	}
+	if (LURD_pressures[1] < 10)
+	{
+	  Serial.print("0");
+	}
+	Serial.print(LURD_pressures[1]);
+	Serial.println(",");
+	Serial.print("R pressure: ,");
+	if (LURD_pressures[2] < 100)
+	{
+	  Serial.print("0");
+	}
+	if (LURD_pressures[2] < 10)
+	{
+	  Serial.print("0");
+	}
+	Serial.print(LURD_pressures[2]);
+	Serial.println(",");
+	Serial.print("D pressure: ,");
+	if (LURD_pressures[3] < 100)
+	{
+	  Serial.print("0");
+	}
+	if (LURD_pressures[3] < 10)
+	{
+	  Serial.print("0");
+	}
+	Serial.print(LURD_pressures[3]);
+	Serial.println(",");
+	Serial.println("");
   }
-  Serial.print("L pressure: ,");
-  if (LURD_pressures[0] < 100)
-  {
-      Serial.print("0");
-  }
-  if (LURD_pressures[0] < 10)
-  {
-      Serial.print("0");
-  }
-  Serial.print(LURD_pressures[0]);
-  Serial.println(",");
-  Serial.print("U pressure: ,");
-  if (LURD_pressures[1] < 100)
-  {
-      Serial.print("0");
-  }
-  if (LURD_pressures[1] < 10)
-  {
-      Serial.print("0");
-  }
-  Serial.print(LURD_pressures[1]);
-  Serial.println(",");
-  Serial.print("R pressure: ,");
-  if (LURD_pressures[2] < 100)
-  {
-      Serial.print("0");
-  }
-  if (LURD_pressures[2] < 10)
-  {
-      Serial.print("0");
-  }
-  Serial.print(LURD_pressures[2]);
-  Serial.println(",");
-  Serial.print("D pressure: ,");
-  if (LURD_pressures[3] < 100)
-  {
-      Serial.print("0");
-  }
-  if (LURD_pressures[3] < 10)
-  {
-      Serial.print("0");
-  }
-  Serial.print(LURD_pressures[3]);
-  Serial.println(",");
-  Serial.println("");
-  
-  }
+}
   
 void processIncomingByte (const byte inByte)
-  {
+{
   static char input_line [MAX_INPUT];
   static unsigned int input_pos = 0;
 
   switch (inByte)
-    {
+  {
 
     case '\n':   // end of text
       input_line [input_pos] = 0;  //null terminator
@@ -109,9 +116,8 @@ void processIncomingByte (const byte inByte)
         input_line [input_pos++] = inByte;
       break;
 
-    } 
-   
-  } 
+  }
+} 
 
 
 int counter = 0;

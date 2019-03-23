@@ -22,7 +22,7 @@ l_pressure = form.getvalue("left_pressure")
 u_pressure = form.getvalue("up_pressure")
 r_pressure = form.getvalue("right_pressure")
 d_pressure = form.getvalue("down_pressure")
-s = serial.Serial("/dev/ttyACM1", 9600)
+s = getSerialConnection("right")
 s.setDTR(1)
 f = open("users.txt", "rb")
 users_file = f.read()
@@ -70,3 +70,26 @@ print '''<script>setTimeout(function() { window.location = "pads.py?cur_user=%s"
 
 print '''</body>'''
 print '''</html>'''
+
+def function getSerialConnection(padSideByteString):
+	padSideByte = (padSideByteString == "left") ? 0 : 1
+
+	s = serial.Serial("/dev/ttyACM0", 9600)
+	s.setDTR(1)
+
+	#Send 9: Gief pad side from ttyACM0
+	s.write("9\r\n")
+	padSide = s.read()
+
+	if (padSide != padSideByte) {
+		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
+		s.close()
+
+		s = serial.Serial("/dev/ttyACM1", 9600)
+		s.setDTR(1)
+		print "<script>alert('ttyACM1 has " + padSideByteString + " side');</script>"
+	} else {
+		print "<script>alert('ttyACM0 has " + padSideByteString + " side');</script>"
+	}
+	
+	return s
