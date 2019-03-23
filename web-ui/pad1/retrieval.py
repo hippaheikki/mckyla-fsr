@@ -71,7 +71,7 @@ print '''<script>setTimeout(function() { window.location = "pads.py?cur_user=%s"
 print '''</body>'''
 print '''</html>'''
 
-def function getSerialConnection(padSideByteString):
+def getSerialConnection(padSideByteString):
 	padSideByte = (padSideByteString == "left") ? 0 : 1
 
 	s = serial.Serial("/dev/ttyACM0", 9600)
