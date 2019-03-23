@@ -10,7 +10,7 @@ def getSerialConnection(padSideByteString):
 
 	#Send 9: Gief pad side from ttyACM0
 	s.write("9\r\n")
-	padSide = s.read()
+	padSide = s.read(78)
 
 	if padSide != padSideByte:
 		#Turns out he was the other side, so ttyACM1 has our pad! We connect to him now!
@@ -18,9 +18,9 @@ def getSerialConnection(padSideByteString):
 
 		s = serial.Serial("/dev/ttyACM1", 9600)
 		s.setDTR(1)
-		print "<script>alert('" + padSideByteString + " side is @ttyACM1 (byte read from arduino: " + padSide + "');</script>"
+		print "<script>alert('" + padSideByteString + " side is @ttyACM1 (data read from arduino: " + padSide + "');</script>"
 	else:
-		print "<script>alert('" + padSideByteString + " side is @ttyACM0 (byte read from arduino: " + padSide + "');</script>"
+		print "<script>alert('" + padSideByteString + " side is @ttyACM0 (data read from arduino: " + padSide + "');</script>"
 	
 	return s
 

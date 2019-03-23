@@ -18,7 +18,7 @@ int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSU
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
 
-byte PAD_SIDE = 1;
+char PAD_SIDE = "1";
 
 char LURD_Keys[5] = "hjlk";
 const unsigned int MAX_INPUT = 50;

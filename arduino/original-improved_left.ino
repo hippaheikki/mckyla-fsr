@@ -18,7 +18,7 @@ int LURD_pressures[4] = {LEFT_PRESSURE, UP_PRESSURE, RIGHT_PRESSURE, DOWN_PRESSU
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
 
-byte PAD_SIDE = 0;
+char PAD_SIDE = "0";
 
 char LURD_Keys[5] = "uipo";
 const unsigned int MAX_INPUT = 50;
