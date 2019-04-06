@@ -19,7 +19,7 @@ int LURD_Values[4] = {0, 0, 0, 0};
 int LURD_State[4] = {0, 0, 0, 0};
 int LURD_pressures[4] = {INITIAL_LEFT_PRESSURE, INITIAL_UP_PRESSURE, INITIAL_RIGHT_PRESSURE, INITIAL_DOWN_PRESSURE};
 int LURD_calibration_pressures[4] = {0, 0, 0, 0};
-int startupCalibrationThreshold = CALIBRATE_LEVEL_MEDIUM;
+int startupCalibrationThreshold = CALIBRATE_MEDIUM_THRESHOLD;
 
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
@@ -44,7 +44,15 @@ void initDataForCaliration() {
 
 void calibrate() {
   initDataForCaliration();
-  setThresholds(startupCalibrationThreshold);
+  setCalibrationThresholds(startupCalibrationThreshold);
+}
+
+void setCalibrationThresholds(int threshold)
+{
+  for (int i = 0; i < 4; i++)
+  {
+    LURD_pressures[i] = LURD_Values[i] + threshold;
+  }
 }
 
 // process data after null terminator is received
@@ -64,7 +72,7 @@ void process_data (char * data)
       //Given command char was 'C'alibrate (ASCII value 67 - 48 -> index 19). Wow, such amazing code.
 
       int threshold = atoi((const char *)&(data[1]));
-      setThresholds(threshold);
+      setCalibrationThresholds(threshold);
     }
     else if (index < 5)
     {
@@ -124,14 +132,6 @@ void processIncomingByte (const byte inByte)
 
   } 
 } 
-
-void setThresholds(int threshold)
-{
-  for (int i = 0; i < 4; i++)
-  {
-    LURD_pressures[i] = LURD_Values[i] + threshold;
-  }
-}
 
 void updateAnalogValues() {
 	//Serial.println(analogRead(1));
