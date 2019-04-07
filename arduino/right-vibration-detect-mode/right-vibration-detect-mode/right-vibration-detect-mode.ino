@@ -11,8 +11,6 @@
 #define INITIAL_RIGHT_PRESSURE 1000
 #define INITIAL_UP_PRESSURE    1000
 
-#include <Keyboard.h>
-
 int LURD_pins[4] = {0, 2, 3, 1};
 int LURD_Values[4] = {0, 0, 0, 0};
 int LURD_State[4] = {0, 0, 0, 0};
@@ -30,12 +28,10 @@ int VDCM_vibrationPadding = 20;
 int oldValueWeight = 1;
 float releaseMultiplier = 0.9f;
 
-char LURD_Keys[5] = "uipo";
+char LURD_Keys[4] = {1, 2, 3, 4};
 const unsigned int MAX_INPUT = 50;
 void setup(void) {
   Serial.begin(9600);
-  
-  Keyboard.begin();
   calibrate();
 }
 
@@ -72,8 +68,8 @@ void process_data (char * data)
 
   //pad side query (9) or set pressures (0-3)???
   if (index == 9) {
-	  //I'm left!
-    Serial.println('0');
+	  //I'm right!
+    Serial.println('1');
   } else if (index == 21) {
       //Given command char was 'E'eanble vibration detection calibration mode
       VDCM_enabled = true;
@@ -166,7 +162,7 @@ void updateAnalogValues() {
 
       if (LURD_State[i] == 0)
       {
-        Keyboard.press(LURD_Keys[i]);
+        Joystick.button(LURD_Keys[i], 1);
         LURD_State[i] = 1;
       }
     }
@@ -175,7 +171,7 @@ void updateAnalogValues() {
       if (VDCM_enabled) VDCM_pressReleased(i);
       if (LURD_State[i] == 1 && LURD_Values[i] < borderValue * releaseMultiplier)
       {
-        Keyboard.release(LURD_Keys[i]);
+        Joystick.button(LURD_Keys[i], 0);
         LURD_State[i] = 0;
       }
     }
