@@ -2,9 +2,9 @@
 
 #define BASE_PRESSURE  0
 
-#define CALIBRATE_LOW_THRESHOLD = 150
-#define CALIBRATE_MEDIUM_THRESHOLD = 300
-#define CALIBRATE_HIGH_THRESHOLD = 450
+#define CALIBRATE_LOW_THRESHOLD 150
+#define CALIBRATE_MEDIUM_THRESHOLD 300
+#define CALIBRATE_HIGH_THRESHOLD 450
 
 #define INITIAL_LEFT_PRESSURE  1000
 #define INITIAL_DOWN_PRESSURE  1000
@@ -23,8 +23,8 @@ int startupCalibrationThreshold = CALIBRATE_MEDIUM_THRESHOLD;
 //Vibration detection calibration mode: VDCM
 bool VDCM_enabled = false;
 int VDCM_vibrationMaxConsecutiveReads = 10;
-int VDCM_LURD_consecutiveReads = {0, 0, 0, 0};
-int VDCM_LURD_maxPressureValues = {0, 0, 0, 0};
+int VDCM_LURD_consecutiveReads[4] = {0, 0, 0, 0};
+int VDCM_LURD_maxPressureValues[4] = {0, 0, 0, 0};
 int VDCM_vibrationPadding = 20;
 
 int oldValueWeight = 1;
@@ -39,18 +39,19 @@ void setup(void) {
   calibrate();
 }
 
-void initDataForCaliration() {
+void initDataForCalibration() {
   for (int i = 0; i < 50; i++)
   {
     updateAnalogValues();
     delay(20);
   }
-  LURD_calibration_pressures = LURD_Values;
+  memcpy(&LURD_calibration_pressures, &LURD_Values, sizeof LURD_Values) ;
 }
 
 void calibrate() {
-  initDataForCaliration();
+  initDataForCalibration();
   setCalibrationThresholds(startupCalibrationThreshold);
+  //printPressures();
 }
 
 void setCalibrationThresholds(int threshold)
@@ -67,7 +68,7 @@ void process_data (char * data)
 
   //do some string parsing  
   data[4]=0;
-  char index = data[0]-48;
+  int index = data[0]-48;
 
   //pad side query (9) or set pressures (0-3)???
   if (index == 9) {
@@ -93,33 +94,39 @@ void process_data (char * data)
       LURD_pressures[index] = atoi((const char *)&(data[1]));
     }
 
-    Serial.print("L pressure: ,");
-    if (LURD_pressures[0] < 100) Serial.print("0");
-    if (LURD_pressures[0] < 10) Serial.print("0");
-    Serial.print(LURD_pressures[0]);
-    Serial.println(",");
-
-    Serial.print("U pressure: ,");
-    if (LURD_pressures[1] < 100) Serial.print("0");
-    if (LURD_pressures[1] < 10) Serial.print("0");
-    Serial.print(LURD_pressures[1]);
-    Serial.println(",");
-
-    Serial.print("R pressure: ,");
-    if (LURD_pressures[2] < 100) Serial.print("0");
-    if (LURD_pressures[2] < 10) Serial.print("0");
-    Serial.print(LURD_pressures[2]);
-    Serial.println(",");
-
-    Serial.print("D pressure: ,");
-    if (LURD_pressures[3] < 100) Serial.print("0");
-    if (LURD_pressures[3] < 10) Serial.print("0");
-    Serial.print(LURD_pressures[3]);
-    Serial.println(",");
-    Serial.println("");
+    printPressures();
   }
 }
-  
+
+void printPressures()
+{
+  Serial.print("L pressure: ,");
+  if (LURD_pressures[0] < 100) Serial.print("0");
+  if (LURD_pressures[0] < 10) Serial.print("0");
+  Serial.print(LURD_pressures[0]);
+  Serial.println(",");
+
+  Serial.print("U pressure: ,");
+  if (LURD_pressures[1] < 100) Serial.print("0");
+  if (LURD_pressures[1] < 10) Serial.print("0");
+  Serial.print(LURD_pressures[1]);
+  Serial.println(",");
+
+  Serial.print("R pressure: ,");
+  if (LURD_pressures[2] < 100) Serial.print("0");
+  if (LURD_pressures[2] < 10) Serial.print("0");
+  Serial.print(LURD_pressures[2]);
+  Serial.println(",");
+
+  Serial.print("D pressure: ,");
+  if (LURD_pressures[3] < 100) Serial.print("0");
+  if (LURD_pressures[3] < 10) Serial.print("0");
+  Serial.print(LURD_pressures[3]);
+  Serial.println(",");
+  Serial.println("");
+}
+
+
 void processIncomingByte (const byte inByte)
 {
   static char input_line [MAX_INPUT];
@@ -177,12 +184,17 @@ void updateAnalogValues() {
 
 void VDCM_pressed(int LURD_index)
 {
-  VDCM_LURD_maxPressureValues[LURD_index] = LURD_Values[LURD_index];
+  if (LURD_Values[LURD_index] > VDCM_LURD_maxPressureValues[LURD_index])
+  {
+    VDCM_LURD_maxPressureValues[LURD_index] = LURD_Values[LURD_index];
+  }
   VDCM_LURD_consecutiveReads[LURD_index]++;
 }
 
 void VDCM_pressReleased(int LURD_index)
 {
+  if (VDCM_LURD_consecutiveReads[LURD_index] == 0) return;
+
   //Was the released panel press shorter than what is considered a vibration?
   if (VDCM_LURD_consecutiveReads[LURD_index] < VDCM_vibrationMaxConsecutiveReads)
   {
