@@ -83,7 +83,6 @@ s.write("7\r\n")
 cur_pressures = s.read(78).split(',')
 s.close()
 
-
 f = open("pad1/indexbottom.html", "rb")
-print f.read() % (cur_user, int(cur_pressures[3]), int(cur_pressures[1]), int(cur_pressures[5]), int(cur_pressures[7]))
+print f.read() % (cur_user, int(cur_pressures[3]), int(cur_pressures[1]), int(cur_pressures[5]), int(cur_pressures[7]), cur_user, cur_user)
 f.close()

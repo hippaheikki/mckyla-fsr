@@ -22,7 +22,7 @@ def getSerialConnection(padSideByteString):
 	
 	return s
 
-s = getSerialConnection("left")
+s = getSerialConnection("right")
 s.write("E\r\n")
 s.close()
 

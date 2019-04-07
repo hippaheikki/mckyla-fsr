@@ -22,8 +22,8 @@ def getSerialConnection(padSideByteString):
 	
 	return s
 
-s = getSerialConnection("left")
-s.write("E\r\n")
+s = getSerialConnection("right")
+s.write("D\r\n")
 s.close()
 
 form = cgi.FieldStorage()
@@ -40,9 +40,10 @@ print '''<script src="../js/scripts.js"></script>'''
 print '''</head>'''
 
 print '''<body>'''
-print '''<div class="button" style="padding: 10px; margin: 0 auto;margin-top: 25px;width: 300px;">'''
-print '''    <a href="vdcm-disable.py?cur_user=%s" style="text-decoration: none;">Stop pad vibration detection calibration</a>''' % cur_user
-print '''</div>'''
+print '''<br><a href=pads.py?cur_user=%s>Return to main page</a>''' % cur_user
+
+print '''<script>setTimeout(function() { window.location = "pads.py?cur_user=%s" }, 1000) </script>''' % cur_user
 
 print '''</body>'''
 print '''</html>'''
+

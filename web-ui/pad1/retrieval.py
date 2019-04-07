@@ -57,7 +57,7 @@ for u in range(len(user_list)):
         break
 cur_user_list = user_list[cur_user_list_index].strip("\n").split(":")
 
-if (len(autocalibrate_threshold) == 3):
+if autocalibrate_threshold:
     s.write("C"+autocalibrate_threshold+"\r\n")
     new_pressures = s.read(78)
 else:
