@@ -1,5 +1,8 @@
 /*For more information see www.ladyada.net/learn/sensors/fsr.html */
 
+//Sides: left 0, right 1
+#define SIDE '1'
+
 #define BASE_PRESSURE  0
 
 #define CALIBRATE_LOW_THRESHOLD 150
@@ -11,9 +14,10 @@
 #define INITIAL_RIGHT_PRESSURE 1000
 #define INITIAL_UP_PRESSURE    1000
 
-int LURD_pins[4] = {0, 2, 3, 1};
-int LURD_Values[4] = {0, 0, 0, 0};
-int LURD_State[4] = {0, 0, 0, 0};
+int LED_pins[4] = {1, 0, 2, 3};
+int LURD_pins[4] = {1, 0, 2, 3};
+int LURD_values[4] = {0, 0, 0, 0};
+int LURD_state[4] = {0, 0, 0, 0};
 int LURD_pressures[4] = {INITIAL_LEFT_PRESSURE, INITIAL_UP_PRESSURE, INITIAL_RIGHT_PRESSURE, INITIAL_DOWN_PRESSURE};
 int LURD_calibration_pressures[4] = {0, 0, 0, 0};
 int startupCalibrationThreshold = CALIBRATE_MEDIUM_THRESHOLD;
@@ -32,7 +36,16 @@ char LURD_Keys[4] = {1, 2, 3, 4};
 const unsigned int MAX_INPUT = 50;
 void setup(void) {
   Serial.begin(9600);
+  setupLedOutputs();
   calibrate();
+}
+
+void setupLedOutputs()
+{
+  for (int i = 0; i < 4; i++)
+  {
+    pinMode(LED_pins[i], OUTPUT);
+  }
 }
 
 void initDataForCalibration() {
@@ -41,7 +54,7 @@ void initDataForCalibration() {
     updateAnalogValues();
     delay(20);
   }
-  memcpy(&LURD_calibration_pressures, &LURD_Values, sizeof LURD_Values) ;
+  memcpy(&LURD_calibration_pressures, &LURD_values, sizeof LURD_values) ;
 }
 
 void calibrate() {
@@ -54,7 +67,7 @@ void setCalibrationThresholds(int threshold)
 {
   for (int i = 0; i < 4; i++)
   {
-    LURD_pressures[i] = LURD_Values[i] + threshold;
+    LURD_pressures[i] = LURD_values[i] + threshold;
   }
 }
 
@@ -68,8 +81,8 @@ void process_data (char * data)
 
   //pad side query (9) or set pressures (0-3)???
   if (index == 9) {
-	  //I'm right!
-    Serial.println('1');
+	  //I'm right or left? #Defined at the start of the file
+    Serial.println(SIDE);
   } else if (index == 21) {
       //Given command char was 'E'eanble vibration detection calibration mode
       VDCM_enabled = true;
@@ -154,25 +167,27 @@ void updateAnalogValues() {
 	//Serial.println(analogRead(1));
   for (int i = 0; i < 4; i++)
   {
-    LURD_Values[i] = (LURD_Values[i] * oldValueWeight + analogRead(LURD_pins[i])) / (oldValueWeight + 1);
+    LURD_values[i] = (LURD_values[i] * oldValueWeight + analogRead(LURD_pins[i])) / (oldValueWeight + 1);
     int borderValue = (LURD_pressures[i] + BASE_PRESSURE);
-    if (LURD_Values[i] > borderValue)
+    if (LURD_values[i] > borderValue)
     {
       if (VDCM_enabled) VDCM_pressed(i);
 
-      if (LURD_State[i] == 0)
+      if (LURD_state[i] == 0)
       {
         Joystick.button(LURD_Keys[i], 1);
-        LURD_State[i] = 1;
+        digitalWrite(LED_pins[i], HIGH);
+        LURD_state[i] = 1;
       }
     }
     else
     {
       if (VDCM_enabled) VDCM_pressReleased(i);
-      if (LURD_State[i] == 1 && LURD_Values[i] < borderValue * releaseMultiplier)
+      if (LURD_state[i] == 1 && LURD_values[i] < borderValue * releaseMultiplier)
       {
         Joystick.button(LURD_Keys[i], 0);
-        LURD_State[i] = 0;
+        digitalWrite(LED_pins[i], LOW);
+        LURD_state[i] = 0;
       }
     }
   }
@@ -180,9 +195,9 @@ void updateAnalogValues() {
 
 void VDCM_pressed(int LURD_index)
 {
-  if (LURD_Values[LURD_index] > VDCM_LURD_maxPressureValues[LURD_index])
+  if (LURD_values[LURD_index] > VDCM_LURD_maxPressureValues[LURD_index])
   {
-    VDCM_LURD_maxPressureValues[LURD_index] = LURD_Values[LURD_index];
+    VDCM_LURD_maxPressureValues[LURD_index] = LURD_values[LURD_index];
   }
   VDCM_LURD_consecutiveReads[LURD_index]++;
 }
