@@ -1,7 +1,7 @@
 /*For more information see www.ladyada.net/learn/sensors/fsr.html */
 
 //Sides: left 0, right 1
-#define SIDE '1'
+#define SIDE '0'
 
 #define BASE_PRESSURE  0
 
@@ -14,8 +14,10 @@
 #define INITIAL_RIGHT_PRESSURE 1000
 #define INITIAL_UP_PRESSURE    1000
 
-int LED_pins[4] = {1, 0, 2, 3};
-int LURD_pins[4] = {1, 0, 2, 3};
+// {1, 0, 2, 3} on FAT right side
+// {0, 2, 3, 1} all other pads (FAT, PRO, Tennari)
+int LED_pins[4] = {0, 2, 3, 1};
+int LURD_pins[4] = {0, 2, 3, 1};
 int LURD_values[4] = {0, 0, 0, 0};
 int LURD_state[4] = {0, 0, 0, 0};
 int LURD_pressures[4] = {INITIAL_LEFT_PRESSURE, INITIAL_UP_PRESSURE, INITIAL_RIGHT_PRESSURE, INITIAL_DOWN_PRESSURE};
