@@ -74,7 +74,7 @@ void setCalibrationThresholds(int threshold)
 {
   for (int i = 0; i < 4; i++)
   {
-    LURD_pressures[i] = LURD_values[i] + threshold;
+    setPressure(i, LURD_values[i] + threshold);
   }
 }
 
@@ -113,7 +113,7 @@ void process_data (char * data)
     }
     else if (index < 5)
     {
-      LURD_pressures[index] = atoi((const char *)&(data[1]));
+      setPressure(index, atoi((const char *)&(data[1])));
     }
 
     printPressures();
@@ -230,7 +230,7 @@ void VDCM_pressReleased(int LURD_index)
   if (VDCM_LURD_consecutiveReads[LURD_index] < VDCM_vibrationMaxConsecutiveReads)
   {
     //Set the threshold above the vibration max pressure value
-    LURD_pressures[LURD_index] = VDCM_LURD_maxPressureValues[LURD_index] + VDCM_vibrationPadding;
+    setPressure(LURD_index, VDCM_LURD_maxPressureValues[LURD_index] + VDCM_vibrationPadding);
 
     //Debug
     /*
