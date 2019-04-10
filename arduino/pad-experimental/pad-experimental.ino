@@ -5,9 +5,9 @@
 
 #define BASE_PRESSURE  0
 
-#define CALIBRATE_LOW_THRESHOLD 50
-#define CALIBRATE_MEDIUM_THRESHOLD 100
-#define CALIBRATE_HIGH_THRESHOLD 200
+#define CALIBRATE_LOW_THRESHOLD 200
+#define CALIBRATE_MEDIUM_THRESHOLD 300
+#define CALIBRATE_HIGH_THRESHOLD 400
 
 #define INITIAL_LEFT_PRESSURE  1000
 #define INITIAL_DOWN_PRESSURE  1000
@@ -203,11 +203,6 @@ void updateAnalogValues() {
         Joystick.button(LURD_Keys[i], 0);
         digitalWrite(LED_pins[i], LOW);
         LURD_state[i] = 0;
-      }
-      else
-      {
-        // Press was not above threshhold, but not below release value either -> VDCM should handle this as a 'press'
-        if (VDCM_enabled) VDCM_pressed(i);
       }
     }
   }

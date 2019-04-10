@@ -114,11 +114,11 @@ void loop() {
   Wire.endTransmission(); // end tranmission
   Wire.requestFrom(PCF8591, 5);
   a = Wire.read();*/
-  int weight = 1;
-  raw0 = analogRead(0);
-  raw1 = analogRead(1);
-  raw2 = analogRead(2);
-  raw3 = analogRead(3);
+  int weight = 1.5f;
+  raw0 = pow(analogRead(0), 1.5f) / 32.622f;
+  raw1 = pow(analogRead(1), 1.5f) / 32.622f;
+  raw2 = pow(analogRead(2), 1.5f) / 32.622f;
+  raw3 = pow(analogRead(3), 1.5f) / 32.622f;
   
   a0 = (a0 * weight + raw0) / ( weight +1);
   a1 = (a1 * weight + raw1) / ( weight +1);
