@@ -181,7 +181,7 @@ void updateAnalogValues() {
   for (int i = 0; i < 4; i++)
   {
     int pressureValue = analogRead(LURD_pins[i]);
-    if (NORMALIZE_PRESSURE_VALUES) pressureValue = pressureValue * pressureValue / MAX_PRESSURE;
+    if (NORMALIZE_PRESSURE_VALUES) pressureValue = pow(pressureValue, 1.5f) / 31.622f; //1000^1.5/1000 = 31.622...
     LURD_values[i] = (LURD_values[i] * oldValueWeight + pressureValue) / (oldValueWeight + 1);
     //int borderValue = (LURD_pressures[i] + BASE_PRESSURE);
     if (LURD_values[i] > LURD_pressures[i])
